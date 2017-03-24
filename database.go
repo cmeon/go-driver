@@ -54,6 +54,8 @@ type Database interface {
 	// When the query is valid, nil returned, otherwise an error is returned.
 	// The query is not executed.
 	ValidateQuery(ctx context.Context, query string) error
+
+	NewTransaction(read []string, write []string) Transaction
 }
 
 // EngineType indicates type of database engine being used.

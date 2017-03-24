@@ -156,5 +156,10 @@ func (d *database) ValidateQuery(ctx context.Context, query string) error {
 	if err := resp.CheckStatus(200); err != nil {
 		return WithStack(err)
 	}
+
+	return nil
+}
+
+func (d *database) NewTransaction(read []string, write []string) Transaction {
 	return nil
 }
