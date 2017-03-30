@@ -55,7 +55,7 @@ type Database interface {
 	// The query is not executed.
 	ValidateQuery(ctx context.Context, query string) error
 
-	NewTransaction(read []string, write []string) Transaction
+	NewTransaction(ctx context.Context, read []string, write []string) Transaction
 }
 
 // EngineType indicates type of database engine being used.

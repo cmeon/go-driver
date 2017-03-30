@@ -160,6 +160,6 @@ func (d *database) ValidateQuery(ctx context.Context, query string) error {
 	return nil
 }
 
-func (d *database) NewTransaction(read []string, write []string) Transaction {
-	return nil
+func (d *database) NewTransaction(ctx context.Context, read []string, write []string) Transaction {
+	return newTransaction(d, read, write)
 }
