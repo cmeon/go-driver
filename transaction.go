@@ -24,6 +24,7 @@ import "context"
 
 // Transaction is
 type Transaction interface {
-	AddQuery(query string, bindVars map[string]interface{}) error
+	AddJSQuery(js string, bindVars map[string]interface{}) error
+	AddAQL(query string, bindVars map[string]interface{}) error
 	Execute(ctx context.Context, result interface{}) error
 }

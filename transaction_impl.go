@@ -24,7 +24,9 @@ package driver
 
 import (
 	"context"
+	"fmt"
 	"path"
+	"strings"
 )
 
 const (
@@ -95,6 +97,12 @@ func (tx *transaction) relPath() string {
 }
 
 func (tx transaction) Execute(ctx context.Context, result interface{}) error {
+	var paramKeys []string
+	for k := range tx.Params {
+		paramKeys = append(paramKeys, k)
+	}
+	tx.Action = fmt.Sprintf(
+		"function(%s){ %s }", strings.Join(paramKeys, ","), tx.Action)
 	req, err := tx.db.conn.NewRequest("POST", tx.relPath())
 	if err != nil {
 		return WithStack(err)
@@ -120,9 +128,17 @@ func (tx transaction) Execute(ctx context.Context, result interface{}) error {
 	return nil
 }
 
-func (tx *transaction) AddQuery(
-	query string, params map[string]interface{}) error {
-	tx.Action += query
+func (tx *transaction) AddAQL(query string, params map[string]interface{}) error {
+	tx.Action += fmt.Sprintf("db.query(%q);", query)
+	for key, value := range params {
+		tx.Params[key] = value
+	}
+	return nil
+}
+
+func (tx *transaction) AddJSQuery(
+	js string, params map[string]interface{}) error {
+	tx.Action += js
 	for key, value := range params {
 		tx.Params[key] = value
 	}
